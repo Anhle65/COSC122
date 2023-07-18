@@ -59,6 +59,7 @@ class ReducedFraction(Fraction):
         # The pass should be replaced with one or more lines of code...
         # ---start student section---
         super().__init__(numerator, denominator)
+        self.frac = Fraction(numerator, denominator)
         self.__reduce__()
         # ===end student section===
 
@@ -81,7 +82,7 @@ class ReducedFraction(Fraction):
         # which will be more than one line...
         # ---start student section---
         """represent the Fraction"""
-        return f"ReducedFraction({self.numerator}, {self.denominator})"
+        return f"ReducedFraction({self.frac.numerator}, {self.frac.denominator})"
         # ===end student section===
 
     def __add__(self, other):
@@ -123,8 +124,17 @@ class MixedNumber():
         fraction = self.fraction + other.fraction
         return MixedNumber(number, fraction)
 
-x = MixedNumber(3, Fraction(1, 3))
-y = MixedNumber(-1, Fraction(2, 5))
-z = x + y
-print(z)
-print(repr(z))
+# x = MixedNumber(3, Fraction(1, 3))
+# y = MixedNumber(-1, Fraction(2, 5))
+# z = x + y
+# print(z)
+# print(repr(z))
+
+r = ReducedFraction(3, 12)
+print('repr:', repr(r))
+print('str:', r)
+print()
+r2 = ReducedFraction(1, 12)
+result = r + r2
+print('repr:', repr(result))
+print('str:', result)
