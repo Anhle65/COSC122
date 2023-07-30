@@ -80,6 +80,11 @@ class LinearArray():
         self.comparisons = 0
 
         # Loop through each item in the data list
+        for i in range(len(self.data)):
+            self.comparisons += 1
+            if self.data[i] == value:
+                return i
+        return None
         # Add one to comparisons for each comparison
         # involving a list element
             # If the item is equal to our search value
@@ -152,17 +157,18 @@ class SortedArray():
         index = 0
         # When these cross, they're at the index the item should be at
         while lower_bound < upper_bound:
+            self.comparisons += 1
             index = (lower_bound + upper_bound) // 2
             if self.data[index] < value:
                 lower_bound = index + 1  # Look in the upper half
             else:
-                upper_bound = index     # Look in the lower half
-
+                upper_bound = index     # Look in the lower half         
         # the following will use the list insert method to insert
         # into the self.data list - think about how you insert
         # into a list. help(list.insert) will be helpful as ever :)
         # ie, it won't be calling this SortedArray insert method...
         self.data.insert(lower_bound, value)
+        
 
     def remove(self, value):
         """Removes the first occurrence of value in the array."""
@@ -192,12 +198,14 @@ class SortedArray():
         upper_bound = len(self.data)
         while lower_bound < upper_bound:
             index = (lower_bound + upper_bound) // 2
+            self.comparisons += 1
             if self.data[index] == value:  # Found it!
                 return index
             if self.data[index] < value:
                 lower_bound = index + 1  # Look in the upper half
             else:
                 upper_bound = index      # Look in the lower half
+            self.comparisons += 1
         # If we haven't found it by now, it doesn't exist
         return None
 

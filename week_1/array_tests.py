@@ -69,7 +69,14 @@ def time_linear_trial(filename):
     given file with a LinearArray
     """
     # ---start student section---
-    pass
+    test_array = LinearArray()
+    print('\nRunning trial on sorted array with', filename)
+    start_time = time.perf_counter()
+    process_file(filename, test_array)
+    end_time = time.perf_counter()
+    time_taken = end_time - start_time
+    print(f"Took {time_taken:.3f} seconds.")
+    return time_taken
     # ===end student section===
 
 
@@ -78,7 +85,14 @@ def time_bva_trial(filename, array_size):
     given file with a BitVectorArray
     """
     # ---start student section---
-    pass
+    test_array = BitVectorArray(array_size)
+    print('\nRunning trial on sorted array with', filename)
+    start_time = time.perf_counter()
+    process_file(filename, test_array)
+    end_time = time.perf_counter()
+    time_taken = end_time - start_time
+    print(f"Took {time_taken:.3f} seconds.")
+    return time_taken
     # ===end student section===
 
 
@@ -86,13 +100,15 @@ def main_tests():
     '''Do some file processing here...'''
 
     # for example, process file0 with a LinearArray
-    filename = 'file0.txt'
-    print('Processing', filename, 'with a linear array')
-    test_array = LinearArray()  # initialise a LinearArray
-    process_file(filename, test_array)
-
+    filename = 'file1.txt'
+    # print('Processing', filename, 'with a linear array')
+    # test_array = SortedArray()  # initialise a LinearArray
+    # process_file(filename, test_array)
+    time_bva_trial(filename, 1000)
     # Add more tests here:)
-
+    # print()
+    # linear_test = LinearArray()
+    # process_file(filename, linear_test)
     # call timing tests here when ready
 
 
@@ -102,3 +118,5 @@ if __name__ == '__main__':
     # This code won't run if this module is imported
     # It only runs if you run this module, eg, by hitting play in Wing
     main_tests()
+    # print(time_sorted_trial('file3.txt'))
+    # print(time_linear_trial('file3.txt'))

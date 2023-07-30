@@ -1,4 +1,5 @@
 '''Compare search times with Python's inbuilt lists and sets.'''
+import matplotlib.pyplot as plt
 import sys
 import time
 import random
@@ -53,11 +54,17 @@ def run_set_trials(num_trials=1):
     for set_size in list_of_sizes:
         # fill test set with n items {0,1,2,....}
         test_set = {i for i in range(set_size)}
-
+        start = time.perf_counter()
+        for i in range(num_trials):
+            # try to find random number (between 1 and n) in the list
+            value_to_find = random.randrange(set_size)
+            found = value_to_find in test_set
+        end = time.perf_counter()
         # repeat the following num_trials times:
         #   check whether a randomly generated number is in the set
         # ---start student section---
-        pass
+        time_taken_per_locate = (end - start) / num_trials
+        print(f"{set_size}\t{time_taken_per_locate:>10.8f}")
         # ===end student section===
         # keep track of all the times
         list_of_times.append(time_taken_per_locate)
@@ -150,8 +157,8 @@ def main():
     # IMPORTANT NOTE: make sure you uncomment out the
     # import for matplotlib at the start of the file
     # before you start trying to do graph things
-    # graph_one_series_example(n_trials=10)
-    # graph_two_series_example(n_trials=10)
+    graph_one_series_example(n_trials=10)
+    graph_two_series_example(n_trials=10)
     #
     #
     # if you can't get matplotlib to run
@@ -162,3 +169,20 @@ def main():
 
 if __name__ == "__main__":
     main()
+# import matplotlib.pyplot as plt
+# n_trials = 10
+# x1, y1 = run_set_trials(n_trials)
+    
+# # We use the following instead of axes = plt.axes() as it opens new figures (figs) 
+# # in new windows for example if you call graph_one_series_example then call 
+# # graph_one_series_example you will get two graph windows :) 
+# fig, axes = plt.subplots()
+    
+# axes.plot(x1, y1, color='blue', marker='o', label='list')
+# axes.set_title(f'List Locate Testing, {n_trials} Trial runs')
+# axes.set_xlabel('n')
+# axes.set_ylabel('Average Time per locate')
+# axes.grid(True)
+# axes.xaxis.set_major_formatter('{x:.0f}')  # otherwise defaults to exp notation
+# legend = axes.legend(loc='upper left')
+# plt.show()
