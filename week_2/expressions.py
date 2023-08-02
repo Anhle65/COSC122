@@ -34,7 +34,6 @@ def tokens_from_string(expression):
     token_list = re.findall(r'(\d+|\*|\+|\/|\-|\)|\(|\^)', expression)
     return token_list
 
-
 def calculate(operator, param1, param2):
     """
     Returns the result of a calculation between param1 and param2 using the
@@ -63,7 +62,6 @@ def calculate(operator, param1, param2):
         return param1 - param2
     else:
         raise Exception(operator +" is an invalid operator!")
-
 
 def evaluate_postfix(expression):
     """
@@ -103,9 +101,17 @@ def evaluate_postfix(expression):
     # NOTE: Convert operands to floats before pushing onto the stack
     tokens = tokens_from_string(expression)
     # ---start student section---
-    pass
+    value = Stack()
+    for token in tokens:
+        if token in OP_PREC:
+            parameter2 = float(value.pop())
+            parameter1 = float(value.pop())
+            result = round(calculate(token, parameter1, parameter2 ),3)
+            value.push(result)
+        else:
+            value.push(float(token))
+    return value.pop()   
     # ===end student section===
-
 
 def infix_to_postfix(infix_expression):
     """
@@ -132,11 +138,30 @@ def infix_to_postfix(infix_expression):
     # Code to process tokens and return the postfix string goes here
     # Hint: if token not in OP_PREC then it is an operand
     tokens = tokens_from_string(infix_expression)
+    operators = Stack()
+    value = []
     # ---start student section---
-    pass
+    for token in tokens:
+        if token not in OP_PREC and token != "(" and token != ")":
+            value.append(token)
+        elif token == "(":
+            operators.push(token)
+        elif token == ")":
+            top_stack = operators.peek()
+            while top_stack != "(":
+                value.append(operators.pop())
+                top_stack = operators.pop()
+        else: 
+            while not operators.is_empty() and OP_PREC[operators.peek()] >= OP_PREC[token]:
+                pop_operator = operators.pop()
+                value.append(pop_operator)
+            operators.push(token)        
+    while not operators.is_empty():
+        value.append(operators.pop())
+    return ' '.join(value)
+    
     # ===end student section===
-
-
+print(infix_to_postfix('2 * ( ( 8 - 2 ) * ( 6 - 1 ) / 2 ) + 3 - 9 / 2 * ( ( 6 - 3 ) / ( 1 + 1 ))'))
 def evaluate_infix(infix_expression):
     """
     Evaluates an infix expression.
@@ -229,9 +254,9 @@ if __name__ == '__main__':
     # doctest.testmod()
 
     # Or you can test each thing separately
-    doctest.run_docstring_examples(calculate, None)
+    # doctest.run_docstring_examples(calculate, None)
     # doctest.run_docstring_examples(evaluate_postfix, None)
-    # doctest.run_docstring_examples(infix_to_postfix, None)
+    doctest.run_docstring_examples(infix_to_postfix, None)
     # doctest.run_docstring_examples(evaluate_infix, None)
     # doctest.run_docstring_examples(evaluate_prefix, None)
 

@@ -52,7 +52,7 @@ class Queue(object):
     def enqueue(self, item):
         """Add an item onto the rear of the queue."""
         # ---start student section---
-        pass
+        self._data.append(item)
         # ===end student section===
 
     def dequeue(self):
@@ -62,7 +62,7 @@ class Queue(object):
             raise IndexError('Can\'t dequeue from an empty queue!')
         else:
             # ---start student section---
-            pass
+            return self._data.pop(0)
             # ===end student section===
 
     def is_empty(self):
@@ -89,4 +89,3 @@ if __name__ == '__main__':
     # failed doctests will show you what you need to fix/write
     # If everything works then the doctests will output nothing...
     doctest.testmod()   # use verbose=1 if you want to always get some output
-

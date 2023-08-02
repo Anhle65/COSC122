@@ -59,7 +59,7 @@ class Deque(object):
         else:
             # Not empty so remove front item and return it
             # ---start student section---
-            pass
+            return self._data.pop(0)
             # ===end student section===
 
     def dequeue_rear(self):
@@ -69,7 +69,7 @@ class Deque(object):
         else:
             # Not empty so remove rear item and return it
             # ---start student section---
-            pass
+            return self._data.pop()
             # ===end student section===
 
     def is_empty(self):
