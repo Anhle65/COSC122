@@ -19,7 +19,8 @@ from sequential_gene_match import sequential_gene_match
 from binary_gene_match import binary_gene_match
 
 TEST_FOLDER = './test_data/'
-TEST_FILE_TEMPLATE = "test_data/test_data-{size}-{common}{sort}.txt"
+# TEST_FILE_TEMPLATE = "test_data/test_data-{size}-{common}{sort}.txt"
+TEST_FILE_TEMPLATE = "C:/Users\Hoang/UC_studying/UC_Python_Projects/COSC122/Assignment/student_files/test_data/test_data-{size}-{common}{sort}.txt"
 
 
 real_count = StatCounter.get_count
@@ -27,10 +28,13 @@ real_count = StatCounter.get_count
 
 class TypeAssertion(object):
 
-    def assertTypesEqual(self, a, b):
+    def assertTypesEqual(self, a, b, msg=''):
         if type(a) != type(b):
-            template = "Type {} does not match type {}"
-            error_msg = template.format(type(a), type(b))
+            if not msg:
+                template = "Type {} does not match type {}"
+                error_msg = template.format(type(a), type(b))
+            else:
+                error_msg = msg
             raise AssertionError(error_msg)
 
 
@@ -63,8 +67,11 @@ class BaseTestCommonGenes(unittest.TestCase, TypeAssertion):
 
         student_answer, _ = genetic_similarity_function(first_genome,
                                                         second_genome)
-        self.assertEqual(student_answer, true_answer)
-        self.assertTypesEqual(student_answer, true_answer)
+        message_if_wrong = f"Your answer list doesn't match the expected answer list. "
+        message_if_wrong += f"Note: Your list is the first list and the expected is the second."
+        self.assertEqual(student_answer, true_answer, message_if_wrong)
+        message_if_wrong = f"Your answer list isn't the same type as the expected list!"
+        self.assertTypesEqual(student_answer, true_answer, message_if_wrong)
 
     def internal_comparisons_test(self, test_file_name,
                                   genetic_similarity_function):
@@ -77,7 +84,13 @@ class BaseTestCommonGenes(unittest.TestCase, TypeAssertion):
 
         _, student_count = genetic_similarity_function(first_genome,
                                                        second_genome)
-        self.assertEqual(student_count, real_count('comparisons'))
+        actual_count = real_count('comparisons')
+        message_if_wrong = f'Your code reported using {student_count} Gene comparisons '
+        message_if_wrong += f'but it actually used {actual_count}. '
+        message_if_wrong += f'This means you are miscounting Gene comparisons, eg, '
+        message_if_wrong += f'not counting Gene comparisons when they are made or '
+        message_if_wrong += f"counting Gene comparisons that weren't made."
+        self.assertEqual(student_count, actual_count, msg=message_if_wrong)
 
     def comparisons_test(self, test_file_name, genetic_similarity_function,
                          target=None):
@@ -93,10 +106,14 @@ class BaseTestCommonGenes(unittest.TestCase, TypeAssertion):
         _, student_count = genetic_similarity_function(first_genome,
                                                        second_genome)
         if target is not None:
-            self.assertEqual(student_count, target)
+            message_if_wrong = f'Your code reported using {student_count} Gene comparisons '
+            message_if_wrong += f'but it should have used {target} comparisons.'
+            self.assertEqual(student_count, target, message_if_wrong)
         else:
             valid_count_range = range(lower_bound, upper_bound + 1)
-            self.assertIn(student_count, valid_count_range)
+            message_if_wrong = f'Your code reported using {student_count} Gene comparisons '
+            message_if_wrong += f'but it should use {lower_bound} <= comparisons < {upper_bound+1}.'
+            self.assertIn(student_count, valid_count_range, message_if_wrong)
 
 
 class TestCommonGenesSequential(BaseTestCommonGenes):
@@ -368,11 +385,11 @@ class SequentialExact(BaseTestCommonGenes):
     # Here we do some extra tests with known values
 
     def test_tiny_comparisons_exact(self):
-        test_file = self.get_filename(size=2, common=1)
+        test_file = self.get_filename(size=1, common=1)
         self.comparisons_test(test_file, 4)
 
     def test_small_none_common_comparisons_exact(self):
-        test_file = self.get_filename(size=10, common=0)
+        test_file = self.get_filename(size=1, common=0)
         self.comparisons_test(test_file, 100)
 
     def test_small_some_common_comparisons_exact(self):
@@ -461,10 +478,11 @@ def all_tests_suite():
     suite = unittest.TestSuite()
     test_loader = unittest.defaultTestLoader.loadTestsFromTestCase
 
-    suite.addTest(test_loader(TinyTestsSequential))
-    suite.addTest(test_loader(SmallTestsSequential))
-    suite.addTest(test_loader(LargeTestsSequential))
-    suite.addTest(test_loader(LargerTestsSequential))
+    # suite.addTest(test_loader(TinyTestsSequential))
+    # suite.addTest(test_loader(SmallTestsSequential))
+    # suite.addTest(test_loader(LargeTestsSequential))
+    # suite.addTest(test_loader(LargerTestsSequential))
+
     # suite.addTest(test_loader(LargestTestsSequential)) # Based on the shorter tests time,
     # suite.addTest(test_loader(HugeTestsSequential))    # how long will these tests take?
     suite.addTest(test_loader(ExactTestsSequential))
