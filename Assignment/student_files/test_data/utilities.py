@@ -39,9 +39,9 @@ def take(sequence, n):
 
 
 # To use the Gene Sequence Generator:
-# >>> from utilities import *
-# >>> genes = take(GeneSequenceGenerator(), 10)
-# >>> print(list(genes))
+from utilities import *
+genes = take(GeneSequenceGenerator(), 10)
+print(list(genes))
 
 
 def read_test_data(filename):
