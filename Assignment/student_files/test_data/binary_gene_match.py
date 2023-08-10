@@ -10,9 +10,6 @@ from classes import GeneList
 # Uncomment the following line to be able to make your own testing Genes
 # from classes import Gene, Genome
 
-
-
-
 def binary_gene_match(first_genome, second_genome):
     """ This function takes two Genome objects, and returns a GeneList
         and an integer.

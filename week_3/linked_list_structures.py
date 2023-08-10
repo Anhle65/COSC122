@@ -96,7 +96,9 @@ class Stack:
     def push(self, item):
         """push a new item on to the stack"""
         # ---start student section---
-        pass
+        temp = Node(item)
+        temp.next_node = self.head
+        self.head = temp
         # ===end student section===
 
     def pop(self):
@@ -106,7 +108,14 @@ class Stack:
         # use the following line to raise error when stack is empty
         # raise IndexError("Can't pop from empty stack.")
         # ---start student section---
-        pass
+        if self.is_empty():
+            raise IndexError("Can't pop from empty stack.")
+        else:
+            current = self.head
+            next = current.next_node
+            self.head = next
+            return current.item
+
         # ===end student section===
 
     def peek(self):
@@ -117,19 +126,25 @@ class Stack:
             raise IndexError("Can't peek at empty stack.")
         else:
             # ---start student section---
-            pass
+            current = self.head
+            return current.item
             # ===end student section===
 
     def is_empty(self):
         """ Returns True if the stack is empty """
         # ---start student section---
-        pass
+        return self.head == None
         # ===end student section===
 
     def __len__(self):
         """ Returns the length --- calling len(s) will invoke this method """
         # ---start student section---
-        pass
+        current = self.head
+        count = 0
+        while current != None:
+            count += 1
+            current = current.next_node
+        return count
         # ===end student section===
 
     def __str__(self):
@@ -246,8 +261,8 @@ def run_tests():
 
     # Can enter an infinite loop if your Stack isn't implemented correctly
     result = doctest.testmod()
-    if with_verbose:
-        print(result)
+    # if with_verbose:
+    #     print(result)
 
     # To check just one class you can comment out the testmod above
     # and uncomment the relevant doc test run line below
