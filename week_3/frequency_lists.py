@@ -175,7 +175,18 @@ class UnsortedFreqList(FreqList):
           3:  'a' = 2
         """
         # ---start student section---
-        pass
+        new_node = FreqNode(item)
+        current = self.head
+        found = False
+        while current != None and not found:
+          if current.item == new_node.item:
+            current.frequency += 1
+            found = True
+          current = current.next_node
+        if not found:
+          new_node.next_node = self.head
+          self.head = new_node
+
         # ===end student section===
 
 
@@ -223,7 +234,23 @@ class NicerUnsortedFreqList(FreqList):
           3:  'c' = 1
         """
         # ---start student section---
-        pass
+        new_node = FreqNode(item)
+        current = self.head
+        check_node = self.head
+        found = False
+        while current != None and not found:
+          if current.item == new_node.item:
+            current.frequency += 1
+            found = True
+          current = current.next_node
+        if not found:
+          if check_node is None:
+            new_node.next_node = self.head
+            self.head = new_node
+          else:
+            while check_node.next_node is not None:
+              check_node = check_node.next_node
+            check_node.next_node = new_node
         # ===end student section===
 
 
@@ -342,7 +369,7 @@ class SortedFreqList(FreqList):
         >>> f.add('d')
         >>> f.add('d')
         >>> f.add('e')
-        >>> print(f)
+        >>> print(f.next_node.frequency)
         Sorted Frequency List
         -----------------------------------
           1:  'c' = 3
@@ -350,6 +377,7 @@ class SortedFreqList(FreqList):
           3:  'a' = 2
           4:  'd' = 2
           5:  'e' = 1
+        1
         >>> f.add('e')
         >>> f.add('e')
         >>> print(f)
@@ -372,7 +400,31 @@ class SortedFreqList(FreqList):
         """
         # make sure you read the docstring for this method!
         # ---start student section---
-        pass
+        new_node = FreqNode(item)
+        current = self.head
+        check_node = self.head
+        previous = None
+        found = False
+        while current != None and not found:
+          if current.item == item:
+            current.increment()
+            if previous == None:
+              self.head = current.next_node
+            else:
+              previous.next_node = current.next_node
+              current.next_node = None
+            self._insert_in_order(current)
+            found = True
+          previous = current
+          current = current.next_node
+        if not found:
+          if check_node is None:
+            new_node.next_node = self.head
+            self.head = new_node
+          else:
+            while check_node.next_node is not None:
+              check_node = check_node.next_node
+            check_node.next_node = new_node
         # ===end student section===
 
 
@@ -400,11 +452,11 @@ def main():
     # Uncomment ones that you want to run individually
     # doctest.run_docstring_examples(UnsortedFreqList.add, None, verbose=with_verbose)
     # doctest.run_docstring_examples(NicerUnsortedFreqList.add, None, verbose=with_verbose)
-    # doctest.run_docstring_examples(SortedFreqList.add, None, verbose=with_verbose)
+    doctest.run_docstring_examples(SortedFreqList.add, None, verbose=with_verbose)
 
     # Comment out the call to run_full_doctests if you just want to run one of the above
     # invidual class tests
-    run_full_doctests(with_verbose)
+    # run_full_doctests(with_verbose)
 
 
 if __name__ == '__main__':

@@ -78,6 +78,8 @@ class Stack:
     'c'
     >>> print(s)
     Stack: head/top -> b -> None
+    >>> print(s.head.item)
+    b
     >>> e = Stack()
     >>> e.peek()
     Traceback (most recent call last):
@@ -96,7 +98,9 @@ class Stack:
     def push(self, item):
         """push a new item on to the stack"""
         # ---start student section---
-        pass
+        temp = Node(item)
+        temp.next_node = self.head
+        self.head = temp
         # ===end student section===
 
     def pop(self):
@@ -106,7 +110,14 @@ class Stack:
         # use the following line to raise error when stack is empty
         # raise IndexError("Can't pop from empty stack.")
         # ---start student section---
-        pass
+        if self.is_empty():
+            raise IndexError("Can't pop from empty stack.")
+        else:
+            current = self.head
+            next = current.next_node
+            self.head = next
+            return current.item
+
         # ===end student section===
 
     def peek(self):
@@ -117,19 +128,25 @@ class Stack:
             raise IndexError("Can't peek at empty stack.")
         else:
             # ---start student section---
-            pass
+            current = self.head
+            return current.item
             # ===end student section===
 
     def is_empty(self):
         """ Returns True if the stack is empty """
         # ---start student section---
-        pass
+        return self.head == None
         # ===end student section===
 
     def __len__(self):
         """ Returns the length --- calling len(s) will invoke this method """
         # ---start student section---
-        pass
+        current = self.head
+        count = 0
+        while current != None:
+            count += 1
+            current = current.next_node
+        return count
         # ===end student section===
 
     def __str__(self):
@@ -198,7 +215,15 @@ class Queue:
         so adding to the rear requires finding the end of the list
         """
         # ---start student section---
-        pass
+        last_pos = Node(item)
+        current = self.head
+        if current is None:
+            self.head = last_pos
+        else:
+            while current.next_node is not None:
+                current = current.next_node
+            current.next_node = last_pos
+
         # ===end student section===
 
     def dequeue(self):
@@ -208,19 +233,30 @@ class Queue:
         # use the following line to raise error when queue is empty
         # raise IndexError("Can't dequeue from empty queue.")
         # ---start student section---
-        pass
+        if self.is_empty():
+            raise IndexError("Can't dequeue from empty queue.")
+        else:
+            current = self.head
+            the_next_node = current.next_node
+            self.head = the_next_node
+            return current.item
         # ===end student section===
 
     def is_empty(self):
         """ returns True if the queue is empty """
         # ---start student section---
-        pass
+        return self.head == None
         # ===end student section===
 
     def __len__(self):
         """ Returns the length --- calling len(q) will invoke this method """
         # ---start student section---
-        pass
+        current = self.head
+        count = 0
+        while current is not None:
+            count = count + 1
+            current = current.next_node
+        return count
         # ===end student section===
 
     def __str__(self):
@@ -238,7 +274,6 @@ class Queue:
         result += ' -> None'
         return result
 
-
 def run_tests():
     """ Runs some tests. Feel free to add more... """
     # change to False to get less doctest output
@@ -246,8 +281,8 @@ def run_tests():
 
     # Can enter an infinite loop if your Stack isn't implemented correctly
     result = doctest.testmod()
-    if with_verbose:
-        print(result)
+    # if with_verbose:
+    #     print(result)
 
     # To check just one class you can comment out the testmod above
     # and uncomment the relevant doc test run line below
