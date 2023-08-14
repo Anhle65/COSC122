@@ -175,7 +175,18 @@ class UnsortedFreqList(FreqList):
           3:  'a' = 2
         """
         # ---start student section---
-        pass
+        new_node = FreqNode(item)
+        current = self.head
+        found = False
+        while current != None and not found:
+          if current.item == new_node.item:
+            current.frequency += 1
+            found = True
+          current = current.next_node
+        if not found:
+          new_node.next_node = self.head
+          self.head = new_node
+
         # ===end student section===
 
 
@@ -398,13 +409,13 @@ def main():
 
     # Individual tests:
     # Uncomment ones that you want to run individually
-    # doctest.run_docstring_examples(UnsortedFreqList.add, None, verbose=with_verbose)
+    doctest.run_docstring_examples(UnsortedFreqList.add, None, verbose=with_verbose)
     # doctest.run_docstring_examples(NicerUnsortedFreqList.add, None, verbose=with_verbose)
     # doctest.run_docstring_examples(SortedFreqList.add, None, verbose=with_verbose)
 
     # Comment out the call to run_full_doctests if you just want to run one of the above
     # invidual class tests
-    run_full_doctests(with_verbose)
+    # run_full_doctests(with_verbose)
 
 
 if __name__ == '__main__':

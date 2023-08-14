@@ -78,6 +78,8 @@ class Stack:
     'c'
     >>> print(s)
     Stack: head/top -> b -> None
+    >>> print(s.head.item)
+    b
     >>> e = Stack()
     >>> e.peek()
     Traceback (most recent call last):
@@ -213,7 +215,15 @@ class Queue:
         so adding to the rear requires finding the end of the list
         """
         # ---start student section---
-        pass
+        last_pos = Node(item)
+        current = self.head
+        if current is None:
+            self.head = last_pos
+        else:
+            while current.next_node is not None:
+                current = current.next_node
+            current.next_node = last_pos
+
         # ===end student section===
 
     def dequeue(self):
@@ -223,19 +233,30 @@ class Queue:
         # use the following line to raise error when queue is empty
         # raise IndexError("Can't dequeue from empty queue.")
         # ---start student section---
-        pass
+        if self.is_empty():
+            raise IndexError("Can't dequeue from empty queue.")
+        else:
+            current = self.head
+            the_next_node = current.next_node
+            self.head = the_next_node
+            return current.item
         # ===end student section===
 
     def is_empty(self):
         """ returns True if the queue is empty """
         # ---start student section---
-        pass
+        return self.head == None
         # ===end student section===
 
     def __len__(self):
         """ Returns the length --- calling len(q) will invoke this method """
         # ---start student section---
-        pass
+        current = self.head
+        count = 0
+        while current is not None:
+            count = count + 1
+            current = current.next_node
+        return count
         # ===end student section===
 
     def __str__(self):
@@ -252,7 +273,6 @@ class Queue:
             current = current.next_node
         result += ' -> None'
         return result
-
 
 def run_tests():
     """ Runs some tests. Feel free to add more... """
