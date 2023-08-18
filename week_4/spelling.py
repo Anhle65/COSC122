@@ -118,7 +118,7 @@ class ChainingHashTable():
         # NOTE:
         # We will use a trivial hash function here to start with
         # Don't worry, you will get to update it later in the lab...
-        return 0
+        return nice_hash(item) % self.n_slots
 
     def store(self, item):
         """Appends an item to the list in the slot at _data[hash]."""
@@ -168,7 +168,24 @@ class ChainingHashTable():
         # remember self._data[index] contains a list of items that hash to
         # the slot at the given index
         # ---start student section---
-        pass
+        value = self._hash(item)
+        found = False
+        for word in self._data[value]:
+            if word == item:
+                return True
+        i = 1
+        current = (value + i) % self.n_slots
+        while not found and self._data is not None:
+            if current == value:
+                break
+            else:
+                for word in self._data[current]:
+                    if word == item:
+                        # result.append(word)
+                        return True
+                i += 1
+                current = (value + i) % self.n_slots
+        return found
         # ===end student section===
 
 
@@ -245,7 +262,7 @@ class LinearHashTable():
         to reduce it down to a number in the range 0..self.n_slots
         """
         # ---start student section---
-        pass
+        return nice_hash(item) % self.n_slots
         # ===end student section===
 
 
@@ -262,9 +279,14 @@ class LinearHashTable():
             raise IndexError("Hash table is full!!!!")
         # ***********************************************************
         # ---start student section---
-        pass
+        value = self._hash(item)
+        found = False
+        while not found:
+            if self._data[value] is None:
+                self._data[value] = item
+                found = True
+            value = (value + 1) % self.n_slots
         # ===end student section===
-
         # Keep track of number of items in hash table
         self.n_items += 1
 
@@ -419,7 +441,7 @@ class QuadraticHashTable():
         to reduce it down to a number in the range 0..self.n_slots
         """
         # ---start student section---
-        pass
+        return nice_hash(item) % self.n_slots
         # ===end student section===
 
     def _next_free_slot(self, first_hash):
@@ -472,7 +494,17 @@ class QuadraticHashTable():
             raise ValueError("Hash table is full!!!!")
         # **************************************************
         # ---start student section---
-        pass
+        value = self._hash(item)
+        origin = value
+        found = False
+        i = 0
+        while not found:
+            if self._data[value] is None:
+                self._data[value] = item
+                found = True
+            else:
+                i += 1
+                value = (origin + i*i) % self.n_slots
         # ===end student section===
         self.n_items += 1
 
@@ -490,12 +522,18 @@ class QuadraticHashTable():
             if 'foo' in ht:
                 ...
         """
-        first_hash = self._hash(item)
+        value = self._hash(item)
+        found = False
+        i = 1
         try_number = 0
-        current_index = first_hash
-        # ---start student section---
-        pass
-        # ===end student section===
+        current = value
+        while not found and try_number <= self.n_slots:
+            try_number += 1
+            if item == self._data[value]:
+                return True
+            i += 1
+            value = (current + i*i) % self.n_slots
+        return found
 
     def __str__(self):
         output = 'QuadraticOpenAddressHashTable:\n'
@@ -543,10 +581,7 @@ def load_doc_words(filename):
 
 
 # ---------------------------------------------------------------------------------------
-def spellcheck_with_list(
-    document_word_list,
-    dictionary_word_list,
-     quiet_mode=False):
+def spellcheck_with_list(document_word_list, dictionary_word_list, quiet_mode=False):
     """
     Checks the spelling of each word in document_word_list (a list of words from a text)
     against the dictionary_word_list (the list of correct words).
@@ -567,7 +602,10 @@ def spellcheck_with_list(
     start_check_time = perf_counter()
     # start
     # ---start student section---
-    pass
+    for word in document_word_list:
+        if word not in dictionary_word_list:
+            num_errors += 1
+            unique_errors.add(word)
     # ===end student section===
     # end
     end_check_time = perf_counter()
@@ -589,8 +627,8 @@ def spellcheck_with_list(
         print_line()
         print()
 
-    return check_time
-
+    return unique_errors, len(unique_errors), num_errors
+# print(spellcheck_with_list(document_word_list=load_doc_words('sherlock.txt'), dictionary_word_list=load_dict_words('words_latin-1.txt')))
 
 # ----------------------------------------------------------------------------
 def build_hash_table(ht_type, ht_size, dictionary_word_list, quiet_mode=False):
@@ -644,7 +682,12 @@ def spellcheck_with_hashtable(document_word_list,
     # ---- start -----
     start_check_time = perf_counter()
     # ---start student section---
-    pass
+    for word in document_word_list:
+        if word not in dictionary_word_list:
+            num_errors += 1
+            if num_errors == 100:
+                expected_word = word
+            unique_errors.add(word)
     # ===end student section===
     end_check_time = perf_counter()
     # ---- end ----
@@ -669,8 +712,11 @@ def spellcheck_with_hashtable(document_word_list,
         print(f'Check time per word in document = {ms_per_word:10.6f} ms')
         print_line()
         print()
+        print(f"The 100th misspelled is {expected_word}")
     return check_time
-
+dictionary_word_list = load_dict_words("words_latin-1.txt")
+doc_word_list = load_doc_words("trgov.txt")
+# check_time = spellcheck_with_hashtable(doc_word_list, dictionary_word_list, "Chaining", 11)
 
 def binary_search(values, needle):
     lowerBound = 0
@@ -739,12 +785,12 @@ if __name__ == '__main__':
         # print(result)
 
     # Idividual tests:
-    doctest.run_docstring_examples(
-    ChainingHashTable, None, verbose=with_verbose)
-    doctest.run_docstring_examples(
+    # doctest.run_docstring_examples(
+    # ChainingHashTable, None, verbose=with_verbose)
+    # doctest.run_docstring_examples(
     # LinearHashTable, None, verbose=with_verbose)
     doctest.run_docstring_examples(
-    # QuadraticHashTable, None, verbose=with_verbose)
+    QuadraticHashTable, None, verbose=with_verbose)
 
     # run all the doctests:
     # doctest.testmod()
