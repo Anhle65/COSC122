@@ -4,7 +4,7 @@
 A module for finding the genetic similarity between 
 two genomes using a binary search.
 """
-from classes import GeneList
+from classes import GeneList, Gene, Genome
 
 
 # Uncomment the following line to be able to make your own testing Genes
@@ -25,6 +25,27 @@ def binary_gene_match(first_genome, second_genome):
     comparisons = 0
     common_genes = GeneList()
     # ---start student section---
-    pass
+    for gene1 in first_genome._genes:
+        lower_bound = 0
+        upper_bound = len(second_genome._genes) - 1
+        while lower_bound <= upper_bound:
+            index = (lower_bound + upper_bound) // 2
+            middle = second_genome._genes[index]
+            comparisons += 1
+            if gene1.__lt__(middle):
+                upper_bound = index - 1
+            else:
+                lower_bound = index + 1
+        index = (lower_bound + upper_bound) // 2
+        middle = second_genome._genes[index]
+        comparisons += 1
+        if gene1.__eq__(middle):
+            common_genes.append(gene1)
+        print(comparisons)
+
+
     # ===end student section===
     return common_genes, comparisons
+genome1 = Genome([Gene('atcg'), Gene('ctga'), Gene('gtcg'), Gene('gtgg')])
+genome2 = Genome([Gene('atcg'), Gene('ctga'), Gene('gtcg'), Gene('gtgg')])
+print(binary_gene_match(genome1, genome2))
