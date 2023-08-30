@@ -1,5 +1,5 @@
 """ Filename: binary_gene_match.py
-    Author: your name should potentially go here
+    Author: Anh Le
 
 A module for finding the genetic similarity between 
 two genomes using a binary search.
