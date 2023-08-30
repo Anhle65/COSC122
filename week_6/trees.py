@@ -118,7 +118,18 @@ class BinarySearchTree(object):
         no answer is returned.
         """
         # ---start student section---
-        pass
+        if subtree_root is None:
+            return out_list
+        else:
+            subtree_rootl = subtree_root.left
+            subtree_rootr = subtree_root.right
+            if subtree_rootl != None:
+                out_list.append(subtree_rootl.value) 
+                self._in_order_items(subtree_rootl, out_list)
+                out_list.append(subtree_root.value)
+            if subtree_rootr != None:
+                out_list.append(subtree_rootr.value)
+                self._in_order_items(subtree_rootr, out_list)
         # ===end student section===
 
     # -------------------------------------------
@@ -359,3 +370,25 @@ if __name__ == '__main__':
     os.environ['TERM'] = 'linux'  # Suppress ^[[?1034h
     doctest.testmod()
 
+node1 = Node('*')
+node2 = Node('-')
+node3 = Node(5)
+node4 = Node(2)
+node5 = Node(6)
+
+# your answer can be up to 4 lines
+node1.left = node2                                          
+node1.right = node5                                         
+node2.left = node3                                          
+node2.right = node4                                        
+# print(node1)
+# Check the tree is what we want
+def display_infix(node):
+    """ Recursive function to print out a parse tree recursively """
+    if node is not None:
+        if node.left: print('(', end=' ')
+        display_infix(node.left)                                    
+        print(node.value, end=' ')
+        display_infix(node.right)                                   
+        if node.left: print(')', end = ' ')                               
+# display_infix(node1)
