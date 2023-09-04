@@ -103,6 +103,9 @@ class BinarySearchTree(object):
         >>> b.insert(7)
         >>> b.in_order_items()
         [3, 4, 5, 7]
+        >>> b.insert(6)
+        >>> b.in_order_items()
+        [3, 4, 5, 6, 7]
         """
         out_list = []
         # out_list will be built up as we recurse through the tree
