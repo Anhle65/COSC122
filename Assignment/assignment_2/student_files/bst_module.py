@@ -45,59 +45,40 @@ class GeneBst:
         if self.root is None:
             self.root = GeneBstNode(gene,disease)
         else:
-            prev_node = self.root
+            updated = False
+            self.comparisons += 1
             current = self.root
-            # self.comparisons += 1
-            if self.root.key > gene:
-                prev_node = self.root.left
-                self.comparisons += 1
-                next_gene = prev_node
-                if prev_node == None:
-                    self.root.left = GeneBstNode(gene,disease)
-                else:
-                    while prev_node is not None:
-                        next_gene = prev_node
-                        self.comparisons += 1
-                        if gene < prev_node.key:
-                            prev_node = prev_node.left
-                            self.comparisons += 1
-                        else:
-                            prev_node = prev_node.right
-                            self.comparisons += 1
+            prev_gene = current
+            if current.key > gene:
+                current = current.left
+                while current is not None:
+                    prev_gene = current
                     self.comparisons += 1
-                    if next_gene.key == gene:
-                        next_gene.value = disease
-                    elif next_gene.key < gene:
-                        next_gene.right = GeneBstNode(gene,disease)
+                    if gene < prev_gene.key:
+                        current = current.left
                     else:
-                        next_gene.left = GeneBstNode(gene,disease)
-            elif self.root.key < gene:
-                self.comparisons += 1
-                current = self.root.right
-                next_gene = current
-                if current == None:
-                    self.root.right = GeneBstNode(gene,disease)
-                else:
-                    while current is not None:
-                        next_gene = current
                         self.comparisons += 1
-                        if gene < current.key:
-                            current = current.left
-                            self.comparisons += 1
-                        else:
-                            current = current.right
-                            self.comparisons += 1
-                    self.comparisons += 1
-                    if next_gene.key == gene:
-                        next_gene.value = disease
-                    elif next_gene.key < gene:
-                        next_gene.right = GeneBstNode(gene,disease)
-                    else:
-                        next_gene.left = GeneBstNode(gene,disease)
+                        current = current.right
             else:
-                # self.comparisons += 1
-                self.root.value = disease
-            
+                current = current.right
+                self.comparisons += 1
+                while current is not None:
+                    prev_gene = current
+                    self.comparisons += 1
+                    if gene < prev_gene.key:
+                        current = current.left
+                    else:
+                        self.comparisons += 1
+                        current = current.right
+            if prev_gene.key < gene:
+                prev_gene.right = GeneBstNode(gene,disease)
+                updated = True
+            elif prev_gene.key > gene:
+                prev_gene.left = GeneBstNode(gene,disease)
+                updated = True
+            if not updated:
+                prev_gene.value = disease
+
 
 
         # ===end student section===
@@ -116,47 +97,42 @@ class GeneBst:
         """
         value = None
         # ---start student section---
-        found = False
         if self.root is None:
-            self.comparisons += 1
             return None
         else:
-            # self.comparisons += 1
-            prev_node = self.root
+            self.comparisons += 1
             current = self.root
-            if self.root.key ==  gene:
-                self.comparisons += 1
-                value = self.root.value
-            elif self.root.key < gene:
-                current = self.root.right
-                while current is not None and not found:
+            prev_gene = current
+            if current.key > gene:
+                current = current.left
+                while current is not None:
+                    prev_gene = current
                     self.comparisons += 1
-                    if current.key == gene:
-                        value = current.value
-                        found = True
-                    elif current.key < gene:
-                        current = current.right
-                    else:
+                    if gene < prev_gene.key:
                         current = current.left
-                self.comparisons += 1
-                if not found:
-                    return None
-            else:
-                prev_node = self.root.left
-                while prev_node is not None and not found:
-                    self.comparisons += 1
-                    if prev_node.key == gene:
-                        value = prev_node.value
-                        found = True
-                    elif prev_node.key < gene:
-                        prev_node = prev_node.right
                     else:
-                        prev_node = prev_node.left
+                        self.comparisons += 1
+                        if gene > prev_gene.key:
+                        # self.comparisons += 1
+                            current = current.right
+                        else:
+                            value = prev_gene.value
+                            return value
+            else:
+                current = current.right
                 self.comparisons += 1
-                
-                if not found:
-                    return None
-
+                while current is not None:
+                    prev_gene = current
+                    self.comparisons += 1
+                    if gene < prev_gene.key:
+                        current = current.left
+                    else:
+                        self.comparisons += 1
+                        if gene > prev_gene.key:
+                            current = current.right
+                        else:
+                            value = prev_gene.value
+                            return value
         # ===end student section===
         return value
 
@@ -175,10 +151,10 @@ def num_nodes_in_tree(root):
     num_nodes = 0
     # ---start student section---
     if root == None:
-        pass
+        return 0
     else:
-        num_nodes_in_tree(root.left) + 1
-        num_nodes_in_tree(root.right) + 1
+        if root is not None:
+            num_nodes = num_nodes_in_tree(root.left) + num_nodes_in_tree(root.right) + 1
     # ===end student section===
     return num_nodes
 
@@ -201,18 +177,26 @@ def bst_depth(root):
         lroot = root.left
         # return bst_depth(lroot) + 1
         if lroot is not None:
-            left_branch = bst_depth(lroot) + 1
-            if rroot is not None:
-                left_branch += 1
+            left_branch1 = bst_depth(lroot) + 1
+            right_branch1 = bst_depth(rroot) + 1
+            if left_branch1 > right_branch1:
+                depth = left_branch1
+            else:
+                depth = right_branch1
         elif rroot is not None:
-            # if rroot is not None:
+            left_branch = bst_depth(lroot) + 1
             right_branch = bst_depth(rroot) + 1
-            if lroot is not None:
-                right_branch += 1
-        if right_branch > left_branch:
-            depth = right_branch
-
-            
+            if left_branch > right_branch:
+                depth = left_branch
+            else:
+                depth = right_branch
+        # elif rroot is not None:
+        #     # if rroot is not None:
+        #     right_branch = bst_depth(rroot) + 1
+        #     if lroot is not None:
+        #         right_branch += 1
+        # if right_branch > left_branch:
+        #     depth = right_branch
     # ===end student section===
     return depth
 
@@ -229,11 +213,10 @@ def bst_in_order(root, result_list=None):
     if result_list is None:
         result_list = []
     # ---start student section---
-    else:
-        bst_in_order(root.left, result_list)
-        if root is not None:
-            result_list.append((root.key,root.value))
-        bst_in_order(root.right, result_list)
+    if root is not None:
+        bst_in_order(root.left, result_list) 
+        result_list.append((root.key,root.value))
+        bst_in_order(root.right, result_list) 
     return result_list
 
 
@@ -268,5 +251,6 @@ if __name__ == "__main__":
     print(bst1)
     bst1.insert(gene2, value3)
     print(bst1)
-    print(bst1.root.right.key, gene1)
-    print(bst1.root.right.value, value2)
+    # print(bst1.root.right.key, gene1)
+    # print(bst1.root.right.value, value2)
+    
