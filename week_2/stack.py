@@ -108,3 +108,15 @@ if __name__ == '__main__':
     # failed doctests will show you what you need to fix/write
     # If everything works then the doctests will output nothing...
     doctest.testmod()
+
+
+# def lambda_handler(event, context):
+    # databaseName = os.environ['AWS_REGION']
+    # print(databaseName)
+#     fibonacci_of(25)
+# def fibonacci_of(n):
+#     if n in {0,1}:
+#         return n
+#     else:
+#         return fibonacci_of(n-1) + fibonacci_of(n-2)
+    # return "Deleted!"

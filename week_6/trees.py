@@ -124,15 +124,9 @@ class BinarySearchTree(object):
         if subtree_root is None:
             return out_list
         else:
-            subtree_rootl = subtree_root.left
-            subtree_rootr = subtree_root.right
-            if subtree_rootl != None:
-                out_list.append(subtree_rootl.value) 
-                self._in_order_items(subtree_rootl, out_list)
-                out_list.append(subtree_root.value)
-            if subtree_rootr != None:
-                out_list.append(subtree_rootr.value)
-                self._in_order_items(subtree_rootr, out_list)
+            self._in_order_items(subtree_root.left, out_list)
+            out_list.append(subtree_root.value)
+            self._in_order_items(subtree_root.right, out_list)
         # ===end student section===
 
     # -------------------------------------------
@@ -161,7 +155,12 @@ class BinarySearchTree(object):
         no answer is returned.
         """
         # ---start student section---
-        pass
+        if subtree_root is None:
+            pass
+        else:
+            out_list.append(subtree_root.value)
+            self._pre_order_items(subtree_root.left, out_list)
+            self._pre_order_items(subtree_root.right, out_list)
         # ===end student section===
 
     # -------------------------------------------
@@ -185,7 +184,12 @@ class BinarySearchTree(object):
         """Performs a post-order traversal from subtree_root,
         adding the values from each node visited to 'out_list'."""
         # ---start student section---
-        pass
+        if subtree_root is None:
+            pass
+        else:
+            self._post_order_items(subtree_root.left, out_list)
+            self._post_order_items(subtree_root.right, out_list)  
+            out_list.append(subtree_root.value) 
         # ===end student section===
 
     # -------------------------------------------
@@ -358,9 +362,13 @@ class BinarySearchTree(object):
          Remember to keep the left child's right child connected to the subtree.
         """
         # ---start student section---
-        pass
+        if subtree_root is None:
+            min_value = subtree_root.value
+        else:
+            # subtree_root = 
+            self._pop_min_recursive(subtree_root.left)
         # ===end student section===
-        # return min_value
+        return min_value
 
     def __repr__(self):
         return repr(self.root)
@@ -386,12 +394,3 @@ node2.left = node3
 node2.right = node4                                        
 # print(node1)
 # Check the tree is what we want
-def display_infix(node):
-    """ Recursive function to print out a parse tree recursively """
-    if node is not None:
-        if node.left: print('(', end=' ')
-        display_infix(node.left)                                    
-        print(node.value, end=' ')
-        display_infix(node.right)                                   
-        if node.left: print(')', end = ' ')                               
-# display_infix(node1)
