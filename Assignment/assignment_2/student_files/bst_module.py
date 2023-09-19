@@ -97,42 +97,21 @@ class GeneBst:
         """
         value = None
         # ---start student section---
-        if self.root is None:
-            return None
-        else:
-            self.comparisons += 1
+        found = False
+        while self.root is not None and not found:
             current = self.root
-            prev_gene = current
-            if current.key > gene:
-                current = current.left
-                while current is not None:
-                    prev_gene = current
-                    self.comparisons += 1
-                    if gene < prev_gene.key:
-                        current = current.left
-                    else:
-                        self.comparisons += 1
-                        if gene > prev_gene.key:
-                        # self.comparisons += 1
-                            current = current.right
-                        else:
-                            value = prev_gene.value
-                            return value
+            self.comparisons += 1
+            if gene < current.key: #go to the left tree 
+                self.root = self.root.left
             else:
-                current = current.right
                 self.comparisons += 1
-                while current is not None:
-                    prev_gene = current
-                    self.comparisons += 1
-                    if gene < prev_gene.key:
-                        current = current.left
-                    else:
-                        self.comparisons += 1
-                        if gene > prev_gene.key:
-                            current = current.right
-                        else:
-                            value = prev_gene.value
-                            return value
+                if gene == current.key:
+                    value = current.value
+                    found = True
+                else:
+                    self.root = self.root.right
+                
+
         # ===end student section===
         return value
 
@@ -190,13 +169,6 @@ def bst_depth(root):
                 depth = left_branch
             else:
                 depth = right_branch
-        # elif rroot is not None:
-        #     # if rroot is not None:
-        #     right_branch = bst_depth(rroot) + 1
-        #     if lroot is not None:
-        #         right_branch += 1
-        # if right_branch > left_branch:
-        #     depth = right_branch
     # ===end student section===
     return depth
 
