@@ -42,45 +42,31 @@ class GeneBst:
         Python to blow-up when testing large, worst case, data sets.
         """
         # ---start student section---
+        direction = 'left'
+        updated = False
+        current = self.root
         if self.root is None:
             self.root = GeneBstNode(gene,disease)
         else:
-            updated = False
-            self.comparisons += 1
-            current = self.root
-            prev_gene = current
-            if current.key > gene:
-                current = current.left
-                while current is not None:
-                    prev_gene = current
-                    self.comparisons += 1
-                    if gene < prev_gene.key:
-                        current = current.left
-                    else:
-                        self.comparisons += 1
-                        current = current.right
-            else:
-                current = current.right
+            while current is not None and not updated: 
                 self.comparisons += 1
-                while current is not None:
-                    prev_gene = current
+                prev = current
+                if current.key > gene:
+                    current = current.left
+                    direction = 'left'
+                else:
                     self.comparisons += 1
-                    if gene < prev_gene.key:
-                        current = current.left
+                    if current.key == gene:
+                        current.value = disease
+                        updated = True
                     else:
-                        self.comparisons += 1
                         current = current.right
-            if prev_gene.key < gene:
-                prev_gene.right = GeneBstNode(gene,disease)
-                updated = True
-            elif prev_gene.key > gene:
-                prev_gene.left = GeneBstNode(gene,disease)
-                updated = True
+                    direction = 'right'
             if not updated:
-                prev_gene.value = disease
-
-
-
+                if direction == 'right':
+                    prev.right = GeneBstNode(gene,disease)
+                else:
+                    prev.left = GeneBstNode(gene,disease)
         # ===end student section===
 
     def __getitem__(self, gene):
@@ -98,20 +84,17 @@ class GeneBst:
         value = None
         # ---start student section---
         found = False
-        while self.root is not None and not found:
-            current = self.root
+        current = self.root
+        while current is not None and not found:
             self.comparisons += 1
             if gene < current.key: #go to the left tree 
-                self.root = self.root.left
-            else:
+                current = current.left
+            else:                  #go to right or return value
                 self.comparisons += 1
                 if gene == current.key:
                     value = current.value
                     found = True
-                else:
-                    self.root = self.root.right
-                
-
+                current = current.right
         # ===end student section===
         return value
 
@@ -154,21 +137,10 @@ def bst_depth(root):
     if root is not None:
         rroot = root.right
         lroot = root.left
-        # return bst_depth(lroot) + 1
-        if lroot is not None:
+        if rroot is not None or lroot is not None:
             left_branch1 = bst_depth(lroot) + 1
             right_branch1 = bst_depth(rroot) + 1
-            if left_branch1 > right_branch1:
-                depth = left_branch1
-            else:
-                depth = right_branch1
-        elif rroot is not None:
-            left_branch = bst_depth(lroot) + 1
-            right_branch = bst_depth(rroot) + 1
-            if left_branch > right_branch:
-                depth = left_branch
-            else:
-                depth = right_branch
+            depth = max(left_branch1,right_branch1)
     # ===end student section===
     return depth
 
@@ -223,6 +195,7 @@ if __name__ == "__main__":
     print(bst1)
     bst1.insert(gene2, value3)
     print(bst1)
+    # print(bst_depth(bst1.root))
     # print(bst1.root.right.key, gene1)
     # print(bst1.root.right.value, value2)
     
