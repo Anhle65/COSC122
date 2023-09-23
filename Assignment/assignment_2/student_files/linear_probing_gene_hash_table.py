@@ -1,5 +1,5 @@
 """
-Author: your name should probably go here :)
+Author: Anh Le :)
 
 This is a module that implements a LinearProbingGeneHashTable.
 
@@ -63,7 +63,7 @@ class LinearProbingGeneHashTable:
         # ---start student section---
         position = gene.__hash__() % self.table_size
         self.hashes += 1
-        if self.hash_table[position] == None:
+        if self.hash_table[position] is None:
             return None
         else:
             name, disease = self.hash_table[position]
@@ -73,7 +73,7 @@ class LinearProbingGeneHashTable:
         check = position + 1
         check = check % self.table_size
         while check != position:
-            if self.hash_table[check] == None:
+            if self.hash_table[check] is None:
                 return None
             else:
                 n_name, n_disease = self.hash_table[check]
@@ -96,16 +96,16 @@ class LinearProbingGeneHashTable:
         condition = True
         position = gene.__hash__() % self.table_size
         check = position
-        if self.hash_table[check] == None:
+        if self.hash_table[check] is None:
             self.hashes += 1
-            self.hash_table[check] = (gene,disease)
+            self.hash_table[check] = (gene, disease)
         else:
             check += 1
             while check != position and condition:
                 check = check % self.table_size
-                if self.hash_table[check] == None:
+                if self.hash_table[check] is None:
                     self.hashes += 1
-                    self.hash_table[check]=(gene,disease)
+                    self.hash_table[check]=(gene, disease)
                     condition = False
                 check += 1
             if condition:
