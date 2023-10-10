@@ -94,7 +94,8 @@ class Max_3_Heap(Heap):
         # Append the item to the end of the heap
         self._items.append(item)
         # Sift it up into place
-        self._sift_up(len(self))
+        if len(self._items) > 2:
+            self._sift_up(len(self._items) - 1)
 
     # -------------------------------------------------
 
@@ -105,7 +106,20 @@ class Max_3_Heap(Heap):
         while it is larger than its parent.
         """
         # ---start student section---
-        pass
+        # if len(self._items) 
+        if len(self._items) == 3:
+            if self._items[1] < self._items[2]:
+                self._items[1], self._items[2] = self._items[2], self._items[1]
+        else:
+            parent = (index + 1) // 3
+            while parent > 0:
+                parent = (index + 1) // 3
+                if self._items[parent] is None:
+                    break
+                else:
+                    if self._items[index] > self._items[parent]:
+                        self._items[index], self._items[parent] = self._items[parent], self._items[index]
+                    index = parent
         # ===end student section===
 
     # -------------------------------------------------
@@ -185,9 +199,9 @@ class Max_3_Heap(Heap):
         True
         """
 
-        if len(self) >0:
+        if len(self._items) >1:
             max_item = self._items[1]
-            if len(self) > 1:
+            if len(self._items) > 2:
                 # If there are more items in the heap, swap the last one with the
                 # first, and sift it down
                 self._items[1] = self._items.pop()
@@ -207,7 +221,23 @@ class Max_3_Heap(Heap):
         heap while it is smaller than any of its children.
         """
         # ---start student section---
-        pass
+        if len(self._items) == 4:
+            if self._items[1] < self._items[2]:
+                self._items[1], self._items[2] = self._items[2], self._items[1]
+        else:
+            while (3 * index + 1) < len(self._items):
+                middle = 3 * index
+                left = 3 * index - 1
+                right = 3* index + 1
+                largest = right
+                if self._items[right] < self._items[middle]:
+                    largest = middle
+                if self._items[largest] < self._items[left]:
+                    largest = left
+
+                if self._items[index] < self._items[largest]:
+                    self._items[index], self._items[largest] = self._items[largest], self._items[index]
+                index = largest    
         # ===end student section===
 
     # -------------------------------------------------
@@ -229,16 +259,33 @@ class Max_3_Heap(Heap):
         False
         """
         # ---start student section---
-        pass
+        index = 1
+        # print(self._items)
+        while index <len(self._items):
+            child_indices = [3 * index + delta for delta in range(-1,2)]
+            valid_child_indices = [i for i in child_indices if i < len(self._items)]
+            if not valid_child_indices:
+                return True  # No children, no worries!
+            parent_value = self._items[index]
+            for i in valid_child_indices:
+                child_value = self._items[i]
+                if child_value > parent_value:
+                    return False
+                index = i
+        return True
         # ===end student section===
 
 
 if __name__ == '__main__':
-    os.environ['TERM'] = 'linux'  # Suppress ^[[?1034h
-    doctest.testmod()
+#     os.environ['TERM'] = 'linux'  # Suppress ^[[?1034h
+#     doctest.testmod()
 
     my_heap = Max_3_Heap()
-    for item in [20, 18,13,15,11,12,16,10,9,11,13,2,9,10,1]:
+    for item in [20,18,13,15,11,12,16,10,9,11,13,2,9,10,1]:
         my_heap.insert(item)
-
-
+    # print(my_heap.pop_max())
+    my_heap.insert(19)
+    print(my_heap._items)
+    # h =Max_3_Heap()
+    # h._items = [None, 100, 90, 40, 30, 80, 60, 30, 11]
+    # print(h.validate())

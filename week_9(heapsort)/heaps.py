@@ -77,7 +77,9 @@ class MinHeap(Heap):
         [None, 2, 3, 5, 7, 4]
         """
         # ---start student section---
-        pass
+        self._items.append(item)
+        if len(self._items) > 2:
+            self._sift_up(len(self._items)-1)
         # ===end student section===
 
     # -------------------------------------------------
@@ -155,12 +157,12 @@ class MinHeap(Heap):
         3
         """
         # ---start student section---
-        if self.is_empty:
+        if len(self._items) == 1:
             return None
         else:
-            self._items[-1], self._items[0] = self._items[0], self._items[-1]
+            self._items[-1], self._items[1] = self._items[1], self._items[-1]
             removed = self._items.pop()
-            self._sift_down(0)
+            self._sift_down(1)
             return removed
 
         # ===end student section===
@@ -173,10 +175,12 @@ class MinHeap(Heap):
         the heap while it is larger than either of its children.
         """
         # While the item at 'index' has at least one child...
-        if (index * 2) <= len(self):
+        if (index * 2 + 1) <= len(self):
             left = 2 * index
             right = left + 1
-            smallest = left
+            smallest = right
+            if self._items[left] < self._items[right]:
+                smallest = left
             if self._items[index] > self._items[smallest]:
                 self._items[smallest], self._items[index] = self._items[index], self._items[smallest]
                 self._sift_down(smallest)
@@ -201,14 +205,50 @@ class MinHeap(Heap):
         >>> h._items = [None, 5, 7, 2]
         >>> h.validate()
         False
+        >>> h1 = MinHeap()
+        >>> h1.insert(1)
+        >>> h1.insert(5)
+        >>> h1.insert(2)
+        >>> h1.insert(7)
+        >>> h1.validate()
+        True
+        >>> h1.pop_min()
+        1
+        >>> h1.validate()
+        True
         """
 
         # ---start student section---
-        pass
+        index = 1
+        # print(self._items)
+        while index <len(self._items):
+            child_indices = [2 * index + delta for delta in range(2)]
+            valid_child_indices = [i for i in child_indices if i < len(self._items)]
+            if not valid_child_indices:
+                return True  # No children, no worries!
+            parent_value = self._items[index]
+            for i in valid_child_indices:
+                child_value = self._items[i]
+                if child_value < parent_value:
+                    return False
+                index = i
+        return True
         # ===end student section===
 
 
 if __name__ == '__main__':
     os.environ['TERM'] = 'linux'  # Suppress ^[[?1034h
     doctest.testmod()
+    # h = MinHeap()
+    # values = load_file("list2.txt")
+    # # print(min(values))
+    # for each in values:
+    #     h.insert(each)
+    # print(len(h._items))
+    # for i in range(100):
+    #     h.pop_min()
+    # print(h.pop_min())
 
+
+    # print(len(h._items))
+    # 11, 175, 22, 205, 195, 170
