@@ -46,7 +46,7 @@ class GeneBst:
         updated = False
         current = self.root
         if self.root is None:
-            self.root = GeneBstNode(gene,disease)
+            self.root = GeneBstNode(gene, disease)
         else:
             while current is not None and not updated: 
                 self.comparisons += 1
@@ -64,9 +64,9 @@ class GeneBst:
                     direction = 'right'
             if not updated:
                 if direction == 'right':
-                    prev.right = GeneBstNode(gene,disease)
+                    prev.right = GeneBstNode(gene, disease)
                 else:
-                    prev.left = GeneBstNode(gene,disease)
+                    prev.left = GeneBstNode(gene, disease)
         # ===end student section===
 
     def __getitem__(self, gene):
@@ -112,7 +112,7 @@ def num_nodes_in_tree(root):
     """
     num_nodes = 0
     # ---start student section---
-    if root == None:
+    if root is None:
         return 0
     else:
         if root is not None:
@@ -140,7 +140,7 @@ def bst_depth(root):
         if rroot is not None or lroot is not None:
             left_branch1 = bst_depth(lroot) + 1
             right_branch1 = bst_depth(rroot) + 1
-            depth = max(left_branch1,right_branch1)
+            depth = max(left_branch1, right_branch1)
     # ===end student section===
     return depth
 

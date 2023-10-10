@@ -48,7 +48,7 @@ class ChainingGeneHashTable:
         # ---start student section---
         position = gene.__hash__() % self.table_size
         self.hashes += 1
-        if self.hash_table[position].head == None:
+        if self.hash_table[position].head is None:
             return None
         else:
             item = self.hash_table[position].head
